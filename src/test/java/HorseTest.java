@@ -42,12 +42,10 @@ class HorseTest {
     @ParameterizedTest
     @ValueSource(strings = {"", " ", "\t", "\n"})
     public void constructorParameterizedTest(String input) {
-        int flag;
         try {
             new Horse(input, 2.0, 23);
         }catch (IllegalArgumentException e){
-            flag = 1;
-            assertEquals(1, flag);
+            assertTrue(true);
         }
     }
 
@@ -63,12 +61,10 @@ class HorseTest {
 
     @Test
     public void constructorTestNegativeNumSpeed() {
-        int flag;
         try {
             new Horse("input", -2.0, 23);
         }catch (IllegalArgumentException e){
-            flag = 1;
-            assertEquals(1, flag);
+            assertTrue(true);
         }
     }
 
@@ -83,12 +79,10 @@ class HorseTest {
 
     @Test
     public void constructorTestNegativeNumDistance() {
-        int flag;
         try {
             new Horse("input", 2.0, -23);
         }catch (IllegalArgumentException e){
-            flag = 1;
-            assertEquals(1, flag);
+            assertTrue(true);
         }
     }
 
