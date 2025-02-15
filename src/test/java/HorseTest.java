@@ -1,3 +1,6 @@
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -9,12 +12,14 @@ import org.mockito.MockedStatic;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mockStatic;
 
+
 class HorseTest {
     Horse horse;
     Horse horse2;
 
     @BeforeEach
     void setUp() {
+
         horse = new Horse("name", 23, 100);
         horse2 = new Horse("name", 23);
     }
