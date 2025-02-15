@@ -2,9 +2,12 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
+import org.mockito.MockedStatic;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.mockStatic;
 
 class HorseTest {
     Horse horse;
@@ -21,14 +24,14 @@ class HorseTest {
     }
 
     @Test
-    public void constructorTest() {
+    public void constructorTestWhitNull() {
         assertThrows(IllegalArgumentException.class, () -> {
             new Horse(null, 2.0, 23);
         });
     }
 
     @Test
-    public void constructorTest1() {
+    public void constructorTestWhitNullComment() {
         try {
             new Horse(null, 2.0, 23);
         }catch (IllegalArgumentException e){
@@ -50,7 +53,7 @@ class HorseTest {
 
     @ParameterizedTest
     @ValueSource(strings = {"", " ", "\t", "\n"})
-    public void constructorParameterized1Test(String input) {
+    public void constructorParameterizedTestComment(String input) {
         try {
             new Horse(input, 2.0, 23);
         }catch (IllegalArgumentException e){
@@ -59,7 +62,7 @@ class HorseTest {
     }
 
     @Test
-    public void constructorTest3() {
+    public void constructorTestNegativeNumSpeed() {
         int flag;
         try {
             new Horse("input", -2.0, 23);
@@ -70,7 +73,7 @@ class HorseTest {
     }
 
     @Test
-    public void constructorTest4() {
+    public void constructorTestNegativeNumSpeedComment() {
         try {
             new Horse("input", -2.0, 23);
         }catch (IllegalArgumentException e){
@@ -79,7 +82,7 @@ class HorseTest {
     }
 
     @Test
-    public void constructorTest5() {
+    public void constructorTestNegativeNumDistance() {
         int flag;
         try {
             new Horse("input", 2.0, -23);
@@ -90,7 +93,7 @@ class HorseTest {
     }
 
     @Test
-    public void constructorTest6() {
+    public void constructorTestNegativeNumDistanceComment() {
         try {
             new Horse("input", 2.0, -23);
         }catch (IllegalArgumentException e){
@@ -101,22 +104,44 @@ class HorseTest {
 
 
     @Test
-    void getName() {
+    void getNameTest() {
         assertEquals("name", horse.getName());
     }
 
     @Test
-    void getSpeed() {
+    void getSpeedTest() {
         assertEquals(23, horse.getSpeed());
     }
 
     @Test
-    void getDistanceThreeParameters () {
+    void getDistanceThreeParametersTest() {
         assertEquals(100, horse.getDistance());
     }
 
     @Test
-    void getDistanceTwoParameters () {
+    void getDistanceTwoParametersTest() {
         assertEquals(0, horse2.getDistance());
+    }
+
+    @Test
+    void moveTest(){
+        try(MockedStatic<Horse> mockedStatic = mockStatic(Horse.class)){
+            horse.move();
+            mockedStatic.verify(() -> Horse.getRandomDouble(0.2, 0.9));
+        }
+    }
+
+    @ParameterizedTest
+    @CsvSource({
+            "2.0, 11.0, 0.5, 10.0",
+            "0.0, 10.0, 0.5, 10.0"
+    })
+    void moveParameterizedTest(double speed, double expectDistance, double expectRandomNum, double beginDistance){
+        Horse horseTemp = new Horse("temp", speed, beginDistance);
+        try(MockedStatic<Horse> mockedStatic = mockStatic(Horse.class)){
+            mockedStatic.when(() -> Horse.getRandomDouble(0.2, 0.9)).thenReturn(expectRandomNum);
+            horseTemp.move();
+            assertEquals(expectDistance, horseTemp.getDistance());
+        }
     }
 }
